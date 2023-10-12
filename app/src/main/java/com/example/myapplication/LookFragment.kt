@@ -14,6 +14,8 @@ class LookFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    // 4주차 작업 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
