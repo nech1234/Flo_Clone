@@ -10,7 +10,7 @@ import com.example.myapplication.databinding.FragmentDetailBinding
 
 class DetailFragment : Fragment() {
 
-    lateinit var binding: FragmentDetailBinding
+    private lateinit var binding: FragmentDetailBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

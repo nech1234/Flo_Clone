@@ -9,7 +9,7 @@ import com.example.myapplication.databinding.FragmentPannelBinding
 
 
 class PannelFragment(val imgRes: Int) : Fragment() {
-    lateinit var binding: FragmentPannelBinding
+    private lateinit var binding: FragmentPannelBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -21,8 +21,12 @@ class PannelFragment(val imgRes: Int) : Fragment() {
     ): View? {
 
         binding = FragmentPannelBinding.inflate(inflater, container, false)
-        binding.pannelImageIv.setImageResource(imgRes)
         return binding.root
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.pannelImageIv.setImageResource(imgRes)
     }
 }

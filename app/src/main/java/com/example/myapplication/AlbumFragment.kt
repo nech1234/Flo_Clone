@@ -11,7 +11,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class AlbumFragment : Fragment() {
 
-    lateinit var binding: FragmentAlbumBinding
+    private lateinit var binding: FragmentAlbumBinding
 
     private val information= arrayListOf("수록곡","상세정보","영상")
 
@@ -23,6 +23,12 @@ class AlbumFragment : Fragment() {
     ): View? {
         binding = FragmentAlbumBinding.inflate(inflater,container,false)
 
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.albumBackIv.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, HomeFragment())
@@ -32,11 +38,9 @@ class AlbumFragment : Fragment() {
         val albumAdapter = AlbumVPAdapter(this)
         binding.albumContentVp.adapter=albumAdapter
         TabLayoutMediator(binding.albumContentTb,binding.albumContentVp){
-            tab,position->
+                tab,position->
             tab.text=information[position]
         }.attach()
-
-        return binding.root
     }
 
 

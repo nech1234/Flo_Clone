@@ -11,7 +11,7 @@ import com.example.myapplication.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    lateinit var binding : FragmentHomeBinding
+    private lateinit var binding : FragmentHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +22,11 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.homeAlbumImgIv1.setOnClickListener {
             (context as MainActivity)
                 .supportFragmentManager.beginTransaction()
@@ -42,6 +46,5 @@ class HomeFragment : Fragment() {
         binding.homePannelBackgroundVp.orientation=ViewPager2.ORIENTATION_HORIZONTAL
         binding.homeBannelIndicator.setViewPager(binding.homeBannerVp)
         binding.homePannelIndicator.setViewPager(binding.homePannelBackgroundVp)
-        return binding.root
     }
 }

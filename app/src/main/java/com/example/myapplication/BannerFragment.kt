@@ -9,15 +9,19 @@ import com.example.myapplication.databinding.FragmentBannerBinding
 
 
 class BannerFragment(val imgRes : Int) : Fragment() {
-    lateinit var binding: FragmentBannerBinding
+    private lateinit var binding: FragmentBannerBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentBannerBinding.inflate(inflater, container, false)
 
-        binding.bannerImageIv.setImageResource(imgRes)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.bannerImageIv.setImageResource(imgRes)
+        super.onViewCreated(view, savedInstanceState)
     }
 }
 
