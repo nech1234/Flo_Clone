@@ -11,7 +11,7 @@ import com.example.myapplication.databinding.FragmentVideoBinding
 
 class VideoFragment : Fragment() {
 
-    lateinit var binding: FragmentVideoBinding
+    private lateinit var binding: FragmentVideoBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

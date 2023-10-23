@@ -11,20 +11,24 @@ import com.example.myapplication.databinding.FragmentSongBinding
 
 class SongFragment : Fragment() {
 
-    lateinit var binding: FragmentSongBinding
+    private lateinit var binding: FragmentSongBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding=FragmentSongBinding.inflate(inflater,container,false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.songMixoffTg.setOnClickListener{
             setMixStatus(false)
         }
         binding.songMixonTg.setOnClickListener{
             setMixStatus(true)
         }
-        return binding.root
     }
     fun setMixStatus(isMixing:Boolean){
         if(!isMixing){
