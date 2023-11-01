@@ -8,20 +8,28 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var activityResultLauncher:ActivityResultLauncher<Intent>
+    private var song:Song = Song()
+    private var gson: Gson =Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_MyApplication)
         super.onCreate(savedInstanceState)
+        //setTheme(R.style.Theme_MyApplication)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var songTitle : String? = null
+        var songSinger : String? = null
+
         initBottomNavigation()
-        val song = Song(binding.mainMiniplayerTitleTv.text.toString(),binding.mainMiniplayerSingerTv.text.toString(),0,60,false)
+        songTitle = binding.mainMiniplayerTitleTv.text.toString()
+        songSinger = binding.mainMiniplayerSingerTv.text.toString()
+        val song = Song(songTitle,songSinger,0,60,false,"music_lilac")
 
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -41,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("second",song.second)
             intent.putExtra("playTime",song.playTime)
             intent.putExtra("isPlaying",song.isPlaying)
+            intent.putExtra("music",song.music)
             activityResultLauncher.launch(intent)
         }
 
@@ -84,5 +93,23 @@ class MainActivity : AppCompatActivity() {
             }
             false
         }
+    }
+
+    private fun setMiniPlayer(song:Song){
+        binding.mainMiniplayerTitleTv.text = song.title
+        binding.mainMiniplayerSingerTv.text = song.singer
+        binding.mainMiniplayerProgressSb.progress = (song.second*100000)/song.playTime
+    }
+    override fun onStart(){
+        super.onStart()
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val songJson=sharedPreferences.getString("songData",null)
+
+        song = if(songJson==null){
+            Song("라일락","아이유(IU)",0,60,false,"music_lilac")
+        }else{
+            gson.fromJson(songJson,Song::class.java)
+        }
+        setMiniPlayer(song)
     }
 }

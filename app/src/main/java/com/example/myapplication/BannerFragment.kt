@@ -20,8 +20,8 @@ class BannerFragment(val imgRes : Int) : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.bannerImageIv.setImageResource(imgRes)
         super.onViewCreated(view, savedInstanceState)
+        binding.bannerImageIv.setImageResource(imgRes)
     }
 }
 
