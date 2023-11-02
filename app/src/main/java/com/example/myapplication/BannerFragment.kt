@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.example.myapplication.databinding.FragmentBannerBinding
 
 
-class BannerFragment(val imgRes : Int) : Fragment() {
+class BannerFragment(val imgRes: Int) : Fragment() {
     private lateinit var binding: FragmentBannerBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
