@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ class HomeFragment : Fragment(), CommunicationInterface {
 
     private lateinit var binding: FragmentHomeBinding
     private var albumDatas = ArrayList<Album>()
+    private lateinit var songDB: SongDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,15 +37,10 @@ class HomeFragment : Fragment(), CommunicationInterface {
 //                .supportFragmentManager.beginTransaction()
 //                .replace(R.id.main_frm, AlbumFragment()).commitAllowingStateLoss()
 //        }
+        inputDummyAlbums()
+        songDB = SongDatabase.getInstance(requireContext())!!
+        albumDatas.addAll(songDB.albumDao().getAlbums())
 
-        albumDatas.apply {
-            add(Album(1, "Butter", "방탄소년단(BTS)", R.drawable.img_album_exp))
-            add(Album(2, "Lilac", "아이유(IU)", R.drawable.img_album_exp2))
-            add(Album(3, "Next Level", "에스파(AESPA)", R.drawable.img_album_exp3))
-            add(Album(4, "Boy with Luv", "방탄소년단(BTS)", R.drawable.img_album_exp4))
-            add(Album(5, "BBoom BBoom", "모모랜드(MOMOLAND)", R.drawable.img_album_exp5))
-            add(Album(6, "Weekend", "태연(Tea Yeon)", R.drawable.img_album_exp6))
-        }
 
         val albumRVAdapter = AlbumRVAdapter(albumDatas)
         binding.homeTodayMusicAlbumRv.adapter = albumRVAdapter
@@ -96,6 +93,70 @@ class HomeFragment : Fragment(), CommunicationInterface {
                 }
             })
             .commitAllowingStateLoss()
+    }
+
+    private fun inputDummyAlbums() {
+        val songDB = SongDatabase.getInstance(requireActivity())!!
+        val songs = songDB.albumDao().getAlbums()
+
+        if (songs.isNotEmpty()) return
+
+        songDB.albumDao().insert(
+            Album(
+                1,
+                "Lilac",
+                "아이유 (IU)",
+                R.drawable.img_album_exp2,
+
+                )
+        )
+        songDB.albumDao().insert(
+            Album(
+                2,
+                "Flu",
+                "태연 (Tae Yeon)",
+                R.drawable.img_album_exp6,
+
+                )
+        )
+        songDB.albumDao().insert(
+            Album(
+                3,
+                "Butter",
+                "방탄소년단 (BTS)",
+                R.drawable.img_album_exp,
+
+                )
+        )
+        songDB.albumDao().insert(
+            Album(
+                4,
+                "Next Level",
+                "에스파 (AESPA)",
+                R.drawable.img_album_exp3,
+
+                )
+        )
+        songDB.albumDao().insert(
+            Album(
+                5,
+                "Boy with Luv",
+                "방탄소년단 (BTS)",
+                R.drawable.img_album_exp5,
+
+                )
+        )
+        songDB.albumDao().insert(
+            Album(
+                6,
+                "BBoom BBoom",
+                "모모랜드 (MOMOLAND)",
+                R.drawable.img_album_exp5,
+
+                )
+        )
+        val songDBData = songDB.albumDao().getAlbums()
+        Log.d("DB data", songDBData.toString())
     }
 
 }

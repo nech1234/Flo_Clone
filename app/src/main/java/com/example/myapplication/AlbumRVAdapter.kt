@@ -43,7 +43,7 @@ class AlbumRVAdapter(private val albumList: ArrayList<Album>) :
         holder.itemView.setOnClickListener {
             mItemClickListener.onItemClick(albumList[position])
         }
-        holder.binding.itemAlbumPlayIv.setOnClickListener {
+        holder.binding.itemAlbumPlayImgIv.setOnClickListener {
             mItemClickListener.onItemClick(albumList[position])
         }
     }

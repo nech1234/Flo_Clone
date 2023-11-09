@@ -17,6 +17,10 @@ class MainActivity : AppCompatActivity() {
     private var song: Song = Song()
     private var gson: Gson = Gson()
 
+    private val songs = arrayListOf<Song>()
+    private lateinit var songDB: SongDatabase
+    private var nowPos = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setTheme(R.style.Theme_MyApplication)
@@ -27,11 +31,9 @@ class MainActivity : AppCompatActivity() {
         var songSinger: String? = null
 
         inputDummySongs()
-
+        initPlayList()
         initBottomNavigation()
-        songTitle = binding.mainMiniplayerTitleTv.text.toString()
-        songSinger = binding.mainMiniplayerSingerTv.text.toString()
-        val song = Song(songTitle, songSinger, 0, 60, false, "music_lilac")
+
 
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -101,11 +103,21 @@ class MainActivity : AppCompatActivity() {
     private fun setMiniPlayer(song: Song) {
         binding.mainMiniplayerTitleTv.text = song.title
         binding.mainMiniplayerSingerTv.text = song.singer
-        binding.mainMiniplayerProgressSb.progress = (song.second * 100000) / song.playTime
+        Log.d("songInfo", song.toString())
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val second = sharedPreferences.getInt("second", 0)
+        Log.d("spfSecond", second.toString())
+        binding.mainMiniplayerProgressSb.progress = (second * 100000 / song.playTime)
+
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun initPlayList() {
+        songDB = SongDatabase.getInstance(this)!!
+        songs.addAll(songDB.songDao().getSongs())
+    }
+
+    override fun onResume() {
+        super.onResume()
 //        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
 //        val songJson=sharedPreferences.getString("songData",null)
 //
@@ -117,15 +129,19 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
         val songId = sharedPreferences.getInt("songId", 0)
 
-        val songDB = SongDatabase.getInstance(this)!!
-        song = if (songId == 0) {
-            songDB.songDao().getSong(1)
-        } else {
-            songDB.songDao().getSong(songId)
-        }
+        nowPos = getPlayingSongPosition(songId)
 
         Log.d("song ID", song.id.toString())
-        setMiniPlayer(song)
+        setMiniPlayer(songs[nowPos])
+    }
+
+    private fun getPlayingSongPosition(songId: Int): Int {
+        for (i in 0 until songs.size) {
+            if (songs[i].id == songId) {
+                return i
+            }
+        }
+        return 0
     }
 
     private fun inputDummySongs() {
@@ -136,6 +152,7 @@ class MainActivity : AppCompatActivity() {
 
         songDB.songDao().insert(
             Song(
+                1,
                 "Lilac",
                 "아이유 (IU)",
                 0,
@@ -143,11 +160,13 @@ class MainActivity : AppCompatActivity() {
                 false,
                 "music_lilac",
                 R.drawable.img_album_exp2,
-                false
-            )
+                false,
+
+                )
         )
         songDB.songDao().insert(
             Song(
+                2,
                 "Flu",
                 "태연 (Tae Yeon)",
                 0,
@@ -160,6 +179,7 @@ class MainActivity : AppCompatActivity() {
         )
         songDB.songDao().insert(
             Song(
+                3,
                 "Butter",
                 "방탄소년단 (BTS)",
                 0,
@@ -172,6 +192,7 @@ class MainActivity : AppCompatActivity() {
         )
         songDB.songDao().insert(
             Song(
+                4,
                 "Next Level",
                 "에스파 (AESPA)",
                 0,
@@ -184,6 +205,7 @@ class MainActivity : AppCompatActivity() {
         )
         songDB.songDao().insert(
             Song(
+                5,
                 "Boy with Luv",
                 "방탄소년단 (BTS)",
                 0,
@@ -196,6 +218,7 @@ class MainActivity : AppCompatActivity() {
         )
         songDB.songDao().insert(
             Song(
+                6,
                 "BBoom BBoom",
                 "모모랜드 (MOMOLAND)",
                 0,

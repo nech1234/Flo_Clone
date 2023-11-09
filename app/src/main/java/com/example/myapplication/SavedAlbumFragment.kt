@@ -12,8 +12,8 @@ import com.example.myapplication.databinding.FragmentSavedAlbumBinding
 
 
 class SavedAlbumFragment : Fragment() {
-    lateinit var binding: FragmentSavedAlbumBinding
-    lateinit var albumDB: SongDatabase
+    private lateinit var binding: FragmentSavedAlbumBinding
+    private lateinit var albumDB: SongDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,10 +36,27 @@ class SavedAlbumFragment : Fragment() {
         binding.lockerSavedAlbumRv.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        val albumRVAdapter = AlbumLockerRVAdapter()
-        //리스너 객체 생성 및 전달
+        val albumRVAdapter = SavedAlbumRVAdapter()
+
+        albumRVAdapter.setMyItemClickListener(object : SavedAlbumRVAdapter.MyItemClickListener {
+            override fun onRemoveSong(songId: Int) {
+                albumDB.albumDao().getLikedAlbums(getJwt())
+            }
+        })
+
+        binding.lockerSavedAlbumRv.adapter = albumRVAdapter
+
+        albumRVAdapter.addAlbums(albumDB.albumDao().getLikedAlbums(getJwt()) as ArrayList)
 
 
+    }
+
+    private fun getJwt(): Int {
+        val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
+        val jwt = spf!!.getInt("jwt", 0)
+        Log.d("MAIN_ACT/GETJWT", "jwt_token: $jwt")
+
+        return jwt
     }
 
 }
