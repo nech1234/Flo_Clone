@@ -143,6 +143,11 @@ class MainActivity : AppCompatActivity() {
         }
         return 0
     }
+    private fun getJwt(): String? {
+        val sharedPreferences =
+            this.getSharedPreferences("auth2", AppCompatActivity.MODE_PRIVATE)
+        return sharedPreferences!!.getString("jwt", "")
+    }
 
     private fun inputDummySongs() {
         val songDB = SongDatabase.getInstance(this)!!
